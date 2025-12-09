@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Model_question extends Model
 {
     use HasFactory;
+
+    protected $table = 'tb_question';
+    protected $fillable = [
+        'grade',
+        'q',
+        'items',
+        'correct',
+    ];
 }

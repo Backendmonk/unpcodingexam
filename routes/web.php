@@ -1,28 +1,29 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminSoalController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-route::get('/login/admin', function () {
+Route::get('/login/admin', function () {
     return view('admin.login');
 })->name('admin.login');
 
-route::controller(App\Http\Controllers\AdminController::class)->group(function () {
-    route::post('/admin/login', 'login')->name('admin.login.submit');
-    route::get('/admin/tambahakun','tambahAkun')->name('admin.tambahakun');
+Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.submit');
+
+Route::get('/admin/tambahakun', [AdminController::class, 'tambahAkun'])->name('admin.tambahakun');
+Route::post('/admin/usersadd', [AdminController::class, 'storeUser'])->name('admin.usersadd');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+route::get('/admin/soal',[AdminSoalController::class,'index'])->name('admin.soal');
+route::post('/admin/soal/store',[AdminSoalController::class,'store'])->name('admin.soal.store');
 });
+
 

@@ -16,20 +16,20 @@
 				<div class="px-8 py-10">
 					<div class="text-center mb-6">
 						<h2 class="text-2xl font-bold">Login Admin</h2>
-						<p class="mt-2 text-sm text-indigo-100/70">Masukkan username dan password untuk mengakses panel admin.</p>
+						<p class="mt-2 text-sm text-indigo-100/70">Masukkan email dan password untuk mengakses panel admin.</p>
 					</div>
 
 					@if(session('error'))
 						<div class="mb-4 text-sm text-red-200 bg-red-900/30 rounded px-4 py-2">{{ session('error') }}</div>
 					@endif
 
-					<form method="POST" action="{{ url('/admin/login') }}" novalidate>
+					<form method="POST" action="{{ url('/admin/login') }}">
 						@csrf
 						<div class="mb-4">
-							<label for="username" class="block text-sm font-medium text-indigo-100/80 mb-2">Username</label>
-							<input id="username" name="username" type="text" value="{{ old('username') }}" required autofocus
+							<label for="email" class="block text-sm font-medium text-indigo-100/80 mb-2">email</label>
+							<input id="email" name="email" type="email" value="{{ old('email') }}" required autofocus
 								class="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/8 placeholder-indigo-200 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400" />
-							@error('username')
+							@error('email')
 								<p class="mt-2 text-xs text-red-200">{{ $message }}</p>
 							@enderror
 						</div>

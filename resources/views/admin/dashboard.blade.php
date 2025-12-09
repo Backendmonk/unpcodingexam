@@ -15,19 +15,31 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-6 rounded-xl bg-white/5 shadow-inner">
-          <h2 class="text-lg font-semibold mb-2">Soal</h2>
-          <p class="text-sm text-indigo-100/80">Kelola bank soal, tambah, edit, dan hapus pertanyaan.</p>
+        <!-- Card Soal -->
+        <div class="p-6 rounded-xl bg-white/5 shadow-inner flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-semibold mb-2">Soal</h2>
+            <p class="text-sm text-indigo-100/80">Kelola bank soal, tambah, edit, dan hapus pertanyaan.</p>
+          </div>
+          <a href="/admin/soal" class="mt-4 inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-sm font-medium text-white text-center">Kelola Soal</a>
         </div>
 
-        <div class="p-6 rounded-xl bg-white/5 shadow-inner">
-          <h2 class="text-lg font-semibold mb-2">Siswa</h2>
-          <p class="text-sm text-indigo-100/80">Lihat daftar siswa, impor, dan sinkronisasi data.</p>
+        <!-- Card Siswa -->
+        <div class="p-6 rounded-xl bg-white/5 shadow-inner flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-semibold mb-2">Siswa</h2>
+            <p class="text-sm text-indigo-100/80">Lihat daftar siswa, impor, dan sinkronisasi data.</p>
+          </div>
+          <a href="/admin/siswa" class="mt-4 inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-sm font-medium text-white text-center">Kelola Siswa</a>
         </div>
 
-        <div class="p-6 rounded-xl bg-white/5 shadow-inner">
-          <h2 class="text-lg font-semibold mb-2">Laporan</h2>
-          <p class="text-sm text-indigo-100/80">Lihat hasil ujian, statistik, dan ekspor laporan.</p>
+        <!-- Card Laporan -->
+        <div class="p-6 rounded-xl bg-white/5 shadow-inner flex flex-col justify-between">
+          <div>
+            <h2 class="text-lg font-semibold mb-2">Laporan</h2>
+            <p class="text-sm text-indigo-100/80">Lihat hasil ujian, statistik, dan ekspor laporan.</p>
+          </div>
+          <a href="/admin/laporan" class="mt-4 inline-block px-4 py-2 bg-indigo-600 hover:bg-indigo-700 rounded-lg text-sm font-medium text-white text-center">Lihat Laporan</a>
         </div>
       </div>
 
