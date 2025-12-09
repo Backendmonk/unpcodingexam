@@ -51,6 +51,11 @@
             Masuk 🚀
         </button>
     </form>
+
+     <a href="{{ ('/') }}" 
+       class="mt-6 inline-block px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow-md">
+        Kembali 
+        </a>
 </div>
 
 <script>

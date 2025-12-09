@@ -45,18 +45,9 @@ class SiswaController extends Controller
             ->where('absen_siswa', $siswa->absen)
             ->first();
 
-      // Jika sudah ada nilai → langsung ke hasil
         if ($cekNilai) {
-            session([
-                'has_submitted' => true,
-                'nilai' => $cekNilai->nilai,
-                'kkm' => $cekNilai->kelas == '7' ? 72 : ($cekNilai->kelas == '8' ? 76 : 78),
-                'status' => ($cekNilai->nilai >= ($cekNilai->kelas == '7' ? 72 : ($cekNilai->kelas == '8' ? 76 : 78)))
-                    ? "LULUS 🎉" : "REMIDI ❌"
-            ]);
-
-            return redirect()->route('siswa.hasil');
-}
+            return back()->with('error', 'Kamu sudah mengerjakan dan memiliki nilai!');
+        }
 
         // Simpan session
         session([
@@ -83,74 +74,57 @@ class SiswaController extends Controller
     }
 
     public function submitUjian(Request $request)
-{
-    // Jika sudah submit, jangan boleh submit ulang
-    if (session()->has('has_submitted')) {
-        return redirect()->route('siswa.hasil');
-    }
+    {
+        $kelas = session('kelas');
+        $nama  = session('nama_siswa');
+        $absen = session('absen_siswa');
 
-    $kelas = session('kelas');
-    $nama  = session('nama_siswa');
-    $absen = session('absen_siswa');
+        $jawaban = $request->jawaban;  // array: ['id_soal' => '["x","y","z"]']
 
-    $jawaban = $request->jawaban;
+        $nilai = 0;
+        $total = 0;
 
-    $nilai = 0;
-    $total = 0;
+        foreach ($jawaban as $id => $userAnswerJSON) {
 
-    foreach ($jawaban as $id => $userAnswer) {
-        $soal = Model_question::find($id);
-        if (!$soal) continue;
+            $soal = Model_question::find($id);
+            if (!$soal) continue;
 
-        $total++;
+            $total++;
 
-        $kunci = json_encode(json_decode($soal->correct));
+            // Decode jawaban user
+            $userAnswer = json_decode($userAnswerJSON, true);
 
-        if (trim($userAnswer) === trim($kunci)) {
-            $nilai += 1;
+            // Decode kunci
+            $correct = json_decode($soal->correct, true);
+
+            // Bandingkan dua array
+            if ($userAnswer == $correct) {
+                $nilai++;
+            }
         }
+
+        // Hitung skor 0-100
+        $finalScore = ($total > 0) ? round(($nilai / $total) * 100) : 0;
+
+        // KKM
+        $kkm = 72;
+        if ($kelas == '8') $kkm = 76;
+        if ($kelas == '9' || $kelas == '9.1' || $kelas == '9.2') $kkm = 78;
+
+        $status = ($finalScore >= $kkm) ? "LULUS 🎉" : "REMIDI ❌";
+
+        // Simpan nilai
+        Model_nilaiSiswa::create([
+            'nama_siswa' => $nama,
+            'absen_siswa' => $absen,
+            'kelas' => $kelas,
+            'nilai' => $finalScore
+        ]);
+
+        return view('siswa.hasil', [
+            'nilai' => $finalScore,
+            'kkm'   => $kkm,
+            'status'=> $status
+        ]);
     }
-
-    $finalScore = ($total > 0) ? round(($nilai / $total) * 100) : 0;
-
-    // KKM
-    $kkm = 72;
-    if ($kelas == '8') $kkm = 76;
-    if (in_array($kelas, ['9', '9.1', '9.2'])) $kkm = 78;
-
-    $status = ($finalScore >= $kkm) ? "LULUS 🎉" : "REMIDI ❌";
-
-    // Simpan nilai ke DB
-    Model_nilaiSiswa::create([
-        'nama_siswa' => $nama,
-        'absen_siswa' => $absen,
-        'kelas' => $kelas,
-        'nilai' => $finalScore
-    ]);
-
-    // SIMPAN STATUS SUBMIT
-    session([
-        'has_submitted' => true,
-        'nilai' => $finalScore,
-        'kkm' => $kkm,
-        'status' => $status
-    ]);
-
-    return redirect()->route('siswa.hasil');
-}
-
-public function hasil()
-{
-    if (!session()->has('has_submitted')) {
-        return redirect()->route('siswa.dashboard');
-    }
-
-    return view('siswa.hasil', [
-        'nilai' => session('nilai'),
-        'kkm' => session('kkm'),
-        'status' => session('status'),
-    ]);
-}
-
-
 }

@@ -17,7 +17,7 @@
 
     <div class="text-center mb-4 text-lg font-semibold">
         ⏳ Waktu Tersisa: 
-        <span id="timer" class="text-red-600">15:00</span>
+        <span id="timer" class="text-red-600">60:00</span>
     </div>
 
     <form action="{{ route('siswa.submit') }}" method="POST">
@@ -73,73 +73,45 @@
 
     </form>
 </div>
-
-<!-- ==========================================
-        🔒 FITUR ANTI REFRESH / BACK / CLOSE
-=========================================== -->
 <script>
-// ==============================================
-// 1. BLOK F5 / CTRL+R / CMD+R
-// ==============================================
-document.addEventListener('keydown', function (e) {
-    if (
-        e.key === "F5" || 
-        (e.ctrlKey && e.key === "r") || 
-        (e.metaKey && e.key === "r")
-    ) {
-        e.preventDefault();
-        alert("❗ Halaman tidak boleh di-refresh. Jawaban dikumpulkan.");
-        document.querySelector("form").submit();
-    }
-});
+// Durasi awal dalam detik
+const initialTime = 3600; // 15 menit
 
-// ==============================================
-// 2. BLOK TOMBOL RELOAD BROWSER
-// ==============================================
-window.addEventListener("beforeunload", function (e) {
-    document.querySelector("form").submit();
-    e.preventDefault();
-    e.returnValue = '';
-});
+// Cek apakah ada sisa waktu di localStorage
+let time = localStorage.getItem("exam_time");
 
-// ==============================================
-// 3. CEGAH TOMBOL BACK
-// ==============================================
-history.pushState(null, null, location.href);
-window.onpopstate = function () {
-    alert("❗ Tidak bisa kembali ketika ujian berlangsung.");
-    history.pushState(null, null, location.href);
-};
+if (time === null) {
+    time = initialTime; 
+} else {
+    time = parseInt(time);
+}
 
-// ==============================================
-// 4. KETIKA TAB DITUTUP / PINDAH TAB → AUTO SUBMIT
-// ==============================================
-document.addEventListener("visibilitychange", function() {
-    if (document.hidden) {
-        document.querySelector("form").submit();
-    }
-});
-
-// ==============================================
-// 5. TIMER 60 MENIT
-// ==============================================
-let time = 3600;
-
-setInterval(function() {
+let timerInterval = setInterval(function() {
     let minutes = Math.floor(time / 60);
     let seconds = time % 60;
 
-    document.getElementById("timer").innerText = 
+    document.getElementById("timer").innerText =
         `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
+    // Simpan sisa waktu setiap detik
+    localStorage.setItem("exam_time", time);
+
     if (time <= 0) {
-        alert("⏰ Waktu habis! Jawaban otomatis dikumpulkan.");
+        clearInterval(timerInterval);
+        localStorage.removeItem("exam_time");
+        alert("Waktu habis! Jawaban otomatis dikumpulkan.");
         document.querySelector("form").submit();
     }
 
     time--;
 }, 1000);
+
+// Hapus timer dari localStorage setelah submit
+document.querySelector("form").addEventListener("submit", function() {
+    localStorage.removeItem("exam_time");
+});
 </script>
+
 
 </body>
 </html>
