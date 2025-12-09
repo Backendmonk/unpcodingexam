@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+route::get('/login/admin', function () {
+    return view('admin.login');
+})->name('admin.login');
+
+route::controller(App\Http\Controllers\AdminController::class)->group(function () {
+    route::post('/admin/login', 'login')->name('admin.login.submit');
+    route::get('/admin/tambahakun','tambahAkun')->name('admin.tambahakun');
+});
+
