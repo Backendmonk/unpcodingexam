@@ -24,6 +24,10 @@ Route::middleware('auth')->group(function () {
 
 route::get('/admin/soal',[AdminSoalController::class,'index'])->name('admin.soal');
 route::post('/admin/soal/store',[AdminSoalController::class,'store'])->name('admin.soal.store');
+
+Route::delete('/admin/soal/{id}/delete', [AdminSoalController::class, 'destroy'])
+    ->name('admin.soal.delete');
+
 });
 
 

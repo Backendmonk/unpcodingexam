@@ -16,4 +16,7 @@ class Model_question extends Model
         'items',
         'correct',
     ];
+    
+   public $incrementing = true;
+   public $timestamps = true;
 }
