@@ -12,6 +12,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+route::get('/admin/tambahakun',[AdminController::class, 'tambahAkun'])
+    ->name('admin.tambahakun');
+route::post('/admin/usersadd', [AdminController::class, 'storeUser'])
+    ->name('admin.useradd');
+
 
 // =================== AUTH ADMIN ========================
 Route::get('/login/admin', function () {
