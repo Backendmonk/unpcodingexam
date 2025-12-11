@@ -20,6 +20,7 @@
         {{ $status == 'LULUS 🎉' ? 'text-green-600' : 'text-red-600' }}">
         {{ $status }}
     </p>
+    <p>Silahkan Kembali ke dashboard atau nilai tidak akan terinput !</p>
     <a href="{{ route('siswa.login') }}" 
        class="mt-6 inline-block px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg shadow-md">
         Kembali ke Dashboard
